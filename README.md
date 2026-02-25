@@ -1,5 +1,4 @@
 ## 📉 Customer Lifecycle & Revenue Risk Analysis
-PostgreSQL | Subscription Analytics | Commercial Insight
 
 ## Tools: 
 PostgreSQL 
@@ -49,7 +48,7 @@ WHERE subscriptiontype = 'Unknown';
 ```
 
 ## 📊 Analysis
-### Executive Baseline Metrics
+1. Executive Baseline Metrics
 The first step establishes the commercial baseline: how much revenue exists, how much is exposed, and what the overall churn rate looks like.
 
 ```sql
@@ -66,7 +65,7 @@ Roughly 20% of recurring revenue is currently exposed, indicating moderate but s
   <img src="Screenshot 2026-02-25 at 16.49.14.png" width="700"/>
 </p>
 
-## Revenue by Subscription Plan
+2. Revenue by Subscription Plan
 Breaking down churn and revenue by plan reveals where retention investment will have the greatest impact. 
 
 ```sql
@@ -86,7 +85,7 @@ Premium customers generate the highest revenue (£3,329.83) and therefore repres
   <img src="Screenshot 2026-02-25 at 16.55.53.png" width="700"/>
 </p>
 
-## Revenue Concentration
+3. Revenue Concentration
 Understanding whether revenue is concentrated among a small group of customers determines how targeted retention strategies should be.
 
 ```sql
@@ -116,7 +115,7 @@ The top 20% of customers generate £2,642.11 in monthly revenue, with £633.82 a
   <img src="Screenshot 2026-02-25 at 17.05.50.png" width="700"/>
 </p>
 
-## High-Value Revenue at Risk
+4. High-Value Revenue at Risk
 Isolating churn within the top 20% revenue segment quantifies the strategic exposure more precisely.
 
 ```sql
@@ -142,7 +141,7 @@ Churn within the top revenue segment accounts for £633 in monthly recurring rev
   <img src="Screenshot 2026-02-25 at 17.05.50.png" width="700"/>
 </p>
 
-## Behavioural Drivers of Churn
+5. Behavioural Drivers of Churn
 Using the 80th percentile of `monthlycharges` as the high-value threshold, this query compares engagement and friction metrics between retained and churned customers.
 
 ```sql
@@ -166,7 +165,7 @@ Within the top revenue segment, churn correlates with lower engagement and highe
 </p>
 
 
-### Pricing vs Churn
+6. Pricing vs Churn
 Testing whether price is the primary churn driver by comparing average charges and churn rates across plans.
 
 ```sql
