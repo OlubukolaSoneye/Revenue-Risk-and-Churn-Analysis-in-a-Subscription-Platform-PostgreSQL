@@ -109,33 +109,7 @@ The top 20% of customers generate £2,642.11 in monthly revenue, with £633.82 a
   <img src="Screenshot 2026-02-25 at 17.05.50.png" width="400"/>
 </p>
 
-4. High-Value Revenue at Risk
-Isolating churn within the top 20% revenue segment quantifies the strategic exposure more precisely.
-
-```sql
-SELECT 
-    COUNT(*) AS top_20pct_customers,
-    ROUND(SUM(monthlycharges), 2) AS revenue_from_top,
-    ROUND(SUM(CASE WHEN churn = 1 THEN monthlycharges ELSE 0 END), 2) AS top_revenue_at_risk
-FROM (
-    SELECT *
-    FROM customer_subscription
-    WHERE monthlycharges IS NOT NULL
-    ORDER BY monthlycharges DESC
-    LIMIT (
-        SELECT CEIL(COUNT(*) * 0.2)
-        FROM customer_subscription
-        WHERE monthlycharges IS NOT NULL
-    )
-) AS top_customers;
-```
-
-Churn within the top revenue segment accounts for £633 in monthly recurring revenue, demonstrating that revenue loss is concentrated among high-value customers rather than evenly distributed across the base.
-<p align="left">
-  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="400"/>
-</p>
-
-5. Behavioural Drivers of Churn
+4. Behavioural Drivers of Churn
 Using the 80th percentile of `monthlycharges` as the high-value threshold, this query compares engagement and friction metrics between retained and churned customers.
 
 ```sql
@@ -159,7 +133,7 @@ Within the top revenue segment, churn correlates with lower engagement and highe
 </p>
 
 
-6. Pricing vs Churn
+5. Pricing vs Churn
 Testing whether price is the primary churn driver by comparing average charges and churn rates across plans.
 
 ```sql
