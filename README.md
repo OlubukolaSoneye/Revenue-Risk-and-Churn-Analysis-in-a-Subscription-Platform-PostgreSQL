@@ -1,6 +1,6 @@
 ## 📉 Customer Lifecycle & Revenue Risk Analysis
 
-## Tools: 
+## Tools 
 PostgreSQL 
 pgAdmin
 SQL (Window Functions, Percentiles, Aggregations)  
