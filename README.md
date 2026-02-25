@@ -1,10 +1,10 @@
 ## 📉 Customer Lifecycle & Revenue Risk Analysis
-### PostgreSQL | Subscription Analytics | Commercial Insight
+PostgreSQL | Subscription Analytics | Commercial Insight
 
-
-## Tools: PostgreSQL · pgAdmin · SQL (Window Functions, Percentiles, Aggregations)  
-## Dataset: 963 subscription customers  
-## Focus: Churn quantification, revenue concentration, behavioural diagnostics
+## Tools: 
+PostgreSQL 
+pgAdmin
+SQL (Window Functions, Percentiles, Aggregations)  
 
 
 ## 📌 Project Overview
