@@ -1,4 +1,4 @@
-## 📉 Customer Lifecycle & Revenue Risk Analysis
+## 📉 Customer Churn & Revenue Risk Analysis on a  Subscription Platform | PostgreSQL 
 ### PostgreSQL | Subscription Analytics | Commercial Insight
 
 
