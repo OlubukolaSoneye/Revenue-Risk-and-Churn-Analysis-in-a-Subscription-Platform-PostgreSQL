@@ -112,12 +112,12 @@ GROUP BY subscriptiontype;
 
 SELECT 
     churn,
-    ROUND(AVG(viewinghoursperweek),2) AS avg_viewing,
-    ROUND(AVG(supportticketspermonth),2) AS avg_support,
-    ROUND(AVG(userrating),2) AS avg_rating
+    ROUND(AVG(viewinghoursperweek), 2) AS avg_viewing,
+    ROUND(AVG(supportticketspermonth), 2) AS avg_support,
+    ROUND(AVG(userrating), 2) AS avg_rating
 FROM customer_subscription
 WHERE monthlycharges >= (
-    SELECT percentile_cont(0.8) 
+    SELECT percentile_cont(0.8)
     WITHIN GROUP (ORDER BY monthlycharges)
     FROM customer_subscription
 )
