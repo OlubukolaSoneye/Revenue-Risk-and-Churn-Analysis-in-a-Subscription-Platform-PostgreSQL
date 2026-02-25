@@ -1,36 +1,26 @@
-## 📉 Customer Churn & Revenue Risk Analysis on a  Subscription Platform | PostgreSQL 
+## 📉 Customer Lifecycle & Revenue Risk Analysis
 ### PostgreSQL | Subscription Analytics | Commercial Insight
 
 
-> **Tools:** PostgreSQL · pgAdmin · SQL (Window Functions, Percentiles, Aggregations)  
-> **Dataset:** 963 subscription customers  
-> **Focus:** Churn quantification, revenue concentration, behavioural diagnostics
+## Tools: PostgreSQL · pgAdmin · SQL (Window Functions, Percentiles, Aggregations)  
+## Dataset: 963 subscription customers  
+## Focus: Churn quantification, revenue concentration, behavioural diagnostics
 
 
 ## 📌 Project Overview
-
-Subscription platforms depend on predictable recurring revenue. Customer churn directly threatens financial stability — particularly when high-value customers disengage silently before cancelling.
-
-This project uses PostgreSQL to analyse subscription behaviour, quantify revenue exposure, and identify the behavioural drivers behind churn. The goal is to move beyond descriptive reporting and produce commercially actionable retention insight.
-
-> 📸 **Screenshot suggestion:** Add a cover image showing your pgAdmin workspace or a summary of key results — save as `images/project-cover.png`
-
----
+Subscription platforms depend on predictable recurring revenue. Customer churn directly threatens financial stability — particularly when high-value customers disengage silently before cancelling. This project uses PostgreSQL to analyse subscription behaviour, quantify revenue exposure, and identify the behavioural drivers behind churn. The goal is to move beyond descriptive reporting and produce commercially actionable retention insight.
 
 ## 🎯 Project Objectives
+Quantify total recurring revenue and revenue currently at risk
+Identify revenue concentration across the customer base 
+Analyse churn rates by subscription plan
+Evaluate behavioural differences between retained and churned customers
+Test whether churn is driven by price or engagement
+Deliver data-driven commercial recommendations
 
-- Quantify total recurring revenue and revenue currently at risk
-- Identify revenue concentration across the customer base
-- Analyse churn rates by subscription plan
-- Evaluate behavioural differences between retained and churned customers
-- Test whether churn is driven by price or engagement
-- Deliver data-driven commercial recommendations
-
----
 
 ## 🗂️ Dataset Overview
-
-The dataset contains **963 subscription customers** with the following attributes:
+The initial dataset contained 963 subscription customers with the following attributes:
 
 | Column | Description |
 |---|---|
@@ -46,26 +36,20 @@ The dataset contains **963 subscription customers** with the following attribute
 | `userrating` | Customer satisfaction rating |
 | `churn` | Target variable — `0` = retained, `1` = churned |
 
----
-
 ## 🔧 Data Cleaning & Preparation
-
-Before analysis, 50 customers had `NULL` subscription types. These were standardised to preserve categorical integrity across all segmentation queries.
+Before analysis, 50 customers had NULL subscription types. Further inspection of these rows revealed missing values across multiple columns including monthlycharges, userrating, and paymentmethod making the rows unreliable for further analysis. These 50 records were excluded from the analysis. Final working dataset: 913 customers. 
 
 ```sql
-UPDATE customer_subscription
-SET subscriptiontype = 'Unknown'
+SELECT COUNT(*) AS null_subscription_customers
+FROM customer_subscription
 WHERE subscriptiontype IS NULL;
+
+DELETE FROM customer_subscription
+WHERE subscriptiontype = 'Unknown';
 ```
 
-> 📸 **Screenshot suggestion:** Show the pgAdmin query result confirming `50 rows affected` — save as `images/data-cleaning.png`
-
----
-
 ## 📊 Analysis
-
-### 1️⃣ Executive Baseline Metrics
-
+### Executive Baseline Metrics
 The first step establishes the commercial baseline: how much revenue exists, how much is exposed, and what the overall churn rate looks like.
 
 ```sql
@@ -76,25 +60,14 @@ SELECT
     ROUND(SUM(CASE WHEN churn = 1 THEN monthlycharges ELSE 0 END), 2) AS mrr_at_risk
 FROM customer_subscription;
 ```
+Roughly 20% of recurring revenue is currently exposed, indicating moderate but strategically significant churn risk.
 
-**Results**
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 16.49.14.png" width="700"/>
+</p>
 
-| Metric | Value |
-|---|---|
-| Total Customers | 963 |
-| Churn Rate | 17.55% |
-| Total Monthly Revenue (MRR) | £9,357 |
-| Revenue at Risk | £1,878 |
-
-Approximately **20% of recurring revenue** is currently exposed to churn — a material financial risk requiring a structured retention response.
-
-> 📸 **Screenshot suggestion:** Show the query output table in pgAdmin — save as `images/baseline-metrics.png`
-
----
-
-### 2️⃣ Revenue by Subscription Plan
-
-Breaking down churn and revenue by plan reveals where retention investment will have the greatest impact.
+## Revenue by Subscription Plan
+Breaking down churn and revenue by plan reveals where retention investment will have the greatest impact. 
 
 ```sql
 SELECT 
@@ -107,20 +80,13 @@ FROM customer_subscription
 GROUP BY subscriptiontype
 ORDER BY revenue DESC;
 ```
+Premium customers generate the highest revenue (£3,329.83) and therefore represent the largest absolute exposure (£668.87), making this segment strategically critical despite a moderate churn rate (16.82%). Basic shows the highest churn (18.77%) while still contributing meaningful revenue (£2,801.31), indicating elevated retention risk within a price-sensitive tier. Standard is the most stable segment, combining strong revenue (£2,715.06) with the lowest churn (16.38%).
 
-**Key Insights**
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 16.55.53.png" width="700"/>
+</p>
 
-- **Premium** generates the highest total revenue and carries the largest absolute revenue exposure
-- **Basic** shows the highest churn rate among core plans
-- **Standard** is the most stable plan by churn behaviour
-- **Unknown** (null records) shows the highest churn — a data quality risk worth investigating
-
-> 📸 **Screenshot suggestion:** Show the full results table in pgAdmin with all plan rows visible — save as `images/plan-breakdown.png`
-
----
-
-### 3️⃣ Revenue Concentration — Pareto Analysis
-
+## Revenue Concentration
 Understanding whether revenue is concentrated among a small group of customers determines how targeted retention strategies should be.
 
 ```sql
@@ -145,32 +111,38 @@ FROM (
 ) AS top_customers;
 ```
 
-**Finding:** The top 20% of customers generate **37% of total revenue**.
+The top 20% of customers generate £2,642.11 in monthly revenue, with £633.82 attributable to churned users. This indicates that nearly 24% of high-value revenue has been lost, signalling concentrated financial risk within the most valuable segment.
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="700"/>
+</p>
 
-While not a classic 80/20 split, this moderate concentration still means retaining high-value customers has a disproportionate effect on overall MRR stability. A 5% reduction in churn within this segment would recover approximately £35/month — with compounding effect over tenure.
-
-> 📸 **Screenshot suggestion:** Show the query result with `top_20pct_customers`, `revenue_from_top`, and `revenue_share_pct` columns — save as `images/pareto-analysis.png`
-
----
-
-### 4️⃣ High-Value Revenue at Risk
-
+## High-Value Revenue at Risk
 Isolating churn within the top 20% revenue segment quantifies the strategic exposure more precisely.
 
-| Metric | Value |
-|---|---|
-| Revenue from top 20% | £2,793 |
-| Revenue at risk within segment | £690 |
-| Share of high-value revenue exposed | ~25% |
+```sql
+SELECT 
+    COUNT(*) AS top_20pct_customers,
+    ROUND(SUM(monthlycharges), 2) AS revenue_from_top,
+    ROUND(SUM(CASE WHEN churn = 1 THEN monthlycharges ELSE 0 END), 2) AS top_revenue_at_risk
+FROM (
+    SELECT *
+    FROM customer_subscription
+    WHERE monthlycharges IS NOT NULL
+    ORDER BY monthlycharges DESC
+    LIMIT (
+        SELECT CEIL(COUNT(*) * 0.2)
+        FROM customer_subscription
+        WHERE monthlycharges IS NOT NULL
+    )
+) AS top_customers;
+```
 
-One in four pounds generated by the most valuable customers is currently at risk. This is not evenly distributed churn — it is a concentrated and preventable loss.
+Churn within the top revenue segment accounts for £633 in monthly recurring revenue, demonstrating that revenue loss is concentrated among high-value customers rather than evenly distributed across the base.
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="700"/>
+</p>
 
-> 📸 **Screenshot suggestion:** Show the query filtering customers above the 80th percentile of `monthlycharges` with the at-risk revenue calculation — save as `images/high-value-risk.png`
-
----
-
-### 5️⃣ Behavioural Drivers of Churn
-
+## Behavioural Drivers of Churn
 Using the 80th percentile of `monthlycharges` as the high-value threshold, this query compares engagement and friction metrics between retained and churned customers.
 
 ```sql
@@ -188,26 +160,13 @@ WHERE monthlycharges >= (
 GROUP BY churn;
 ```
 
-**Results**
+Within the top revenue segment, churn correlates with lower engagement and higher support interaction, while satisfaction scores remain stable, indicating behavioural friction, not price or sentiment, as the primary driver.
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 17.26.16.png" width="700"/>
+</p>
 
-| Metric | Retained | Churned |
-|---|---|---|
-| Avg Viewing Hours / Week | 21.58 | 16.66 |
-| Avg Support Tickets / Month | 4.25 | 4.84 |
-| Avg User Rating | 3.06 | 3.21 |
 
-**Interpretation**
-
-- Churned customers show **23% lower engagement** — disengagement precedes cancellation
-- Churned customers raise **more support tickets** — operational friction increases exit likelihood
-- User ratings show **no meaningful difference** — satisfaction scores alone are not reliable churn predictors
-
-> 📸 **Screenshot suggestion:** Show the side-by-side results for `churn = 0` and `churn = 1` in pgAdmin — save as `images/behavioural-analysis.png`
-
----
-
-### 6️⃣ Pricing vs Churn
-
+### Pricing vs Churn
 Testing whether price is the primary churn driver by comparing average charges and churn rates across plans.
 
 ```sql
@@ -220,54 +179,22 @@ GROUP BY subscriptiontype
 ORDER BY avg_price DESC;
 ```
 
-**Finding:** Price variation across plans is minimal, yet churn rates differ meaningfully between segments.
-
-Churn is **not primarily price-driven**. Engagement decline and support friction are stronger predictors of customer exit than monthly charge levels.
-
-> 📸 **Screenshot suggestion:** Show the results table with `avg_price` and `churn_rate` side by side across all plans — save as `images/pricing-vs-churn.png`
-
----
+Despite near-identical average pricing across plans, churn differs across the categories. Basic exhibits the highest churn rate, this suggests churn is not primarily price-driven.
+<p align="left">
+  <img src="Screenshot 2026-02-25 at 17.47.44.png" width="700"/>
+</p>
 
 ## 💡 Commercial Recommendations
+1. Prioritise high-value retention.
+The top 20% of customers generate 37% of total revenue, with £690 already lost within this segment. Churned high-value customers exhibit materially lower engagement prior to exit, making weekly viewing hours a practical early-warning indicator. Monitoring sustained engagement decline allows for proactive intervention before revenue is lost.
 
-| Priority | Action |
-|---|---|
-| 🔴 High | Implement proactive outreach for high-value customers showing engagement decline |
-| 🔴 High | Track weekly viewing hours as an early churn signal — intervene before cancellation |
-| 🟡 Medium | Reduce support ticket resolution time in the Premium segment |
-| 🟡 Medium | Investigate root causes of elevated Basic plan churn |
-| 🟢 Low | Develop content and loyalty incentives to re-engage at-risk users |
+2. Reduce operational friction.
+Churned customers generate more support tickets than retained users, particularly within the Premium segment. Elevated service interaction suggests product or support friction is accelerating churn decisions. Improving resolution speed and implementing proactive support outreach may directly mitigate this risk.
 
----
+3. Address Basic plan instability.
+The Basic tier records the highest churn rate among core plans. While pricing differences are minimal, the elevated churn suggests perceived value or onboarding effectiveness may be weaker in this segment. Targeted investigation and value reinforcement are recommended.
 
 ## 🎯 Key Takeaways
+Churn analysis should not be limited to counting customer exits. By weighting churn against revenue exposure, segmenting customers by value, and testing behavioural versus financial drivers, this project reframes churn as a revenue-risk problem rather than a volume metric.
 
-This project demonstrates how structured SQL analysis can move beyond descriptive reporting to deliver commercially grounded insight:
-
-- **Revenue-weighted churn analysis** — not all churners cost the same
-- **Customer segmentation logic** — identifying where risk is actually concentrated
-- **Behavioural diagnostics** — engagement and friction outperform pricing as churn predictors
-- **Retention prioritisation** — directing effort where financial impact is highest
-
----
-
-## 🗂️ Repository Structure
-
-```
-├── README.md
-├── sql/
-│   ├── 01_baseline_metrics.sql
-│   ├── 02_revenue_by_plan.sql
-│   ├── 03_pareto_analysis.sql
-│   ├── 04_high_value_risk.sql
-│   ├── 05_behavioural_drivers.sql
-│   └── 06_pricing_vs_churn.sql
-└── images/
-    ├── project-cover.png
-    ├── data-cleaning.png
-    ├── baseline-metrics.png
-    ├── plan-breakdown.png
-    ├── pareto-analysis.png
-    ├── high-value-risk.png
-    ├── behavioural-analysis.png
-    └── pricing-vs-churn.png
+The results indicate that churn is not primarily price-driven. Instead, declining engagement and increased support interaction are stronger predictors of exit. These signals are observable in advance, enabling proactive, revenue-focused retention strategies targeted where financial impact is greatest.
