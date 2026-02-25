@@ -1,9 +1,5 @@
 ## 📉 Customer Lifecycle & Revenue Risk Analysis
 
-## Tools 
-PostgreSQL, pgAdmin, SQL (Window Functions, Percentiles, Aggregations)  
-
-
 ## 📌 Project Overview
 Subscription platforms depend on predictable recurring revenue. Customer churn directly threatens financial stability — particularly when high-value customers disengage silently before cancelling. This project uses PostgreSQL to analyse subscription behaviour, quantify revenue exposure, and identify the behavioural drivers behind churn. The goal is to move beyond descriptive reporting and produce commercially actionable retention insight.
 
@@ -191,7 +187,12 @@ Churned customers generate more support tickets than retained users, particularl
 3. Address Basic plan instability.
 The Basic tier records the highest churn rate among core plans. While pricing differences are minimal, the elevated churn suggests perceived value or onboarding effectiveness may be weaker in this segment. Targeted investigation and value reinforcement are recommended.
 
-## 🎯 Key Takeaways
+## 🎯 Key Takeaway
 Churn analysis should not be limited to counting customer exits. By weighting churn against revenue exposure, segmenting customers by value, and testing behavioural versus financial drivers, this project reframes churn as a revenue-risk problem rather than a volume metric.
 
 The results indicate that churn is not primarily price-driven. Instead, declining engagement and increased support interaction are stronger predictors of exit. These signals are observable in advance, enabling proactive, revenue-focused retention strategies targeted where financial impact is greatest.
+
+## Tools 
+PostgreSQL, pgAdmin, SQL (Window Functions, Percentiles, Aggregations)  
+
+
