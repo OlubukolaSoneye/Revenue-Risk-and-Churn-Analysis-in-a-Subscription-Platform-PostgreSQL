@@ -1,4 +1,4 @@
-## 📉 Customer Lifecycle & Revenue Risk Analysis
+## 📉 Customer Churn and Revenue Risk Analysis
 
 ## 📌 Project Overview
 Subscription platforms depend on predictable recurring revenue. Customer churn directly threatens financial stability — particularly when high-value customers disengage silently before cancelling. This project uses PostgreSQL to analyse subscription behaviour, quantify revenue exposure, and identify the behavioural drivers behind churn. The goal is to move beyond descriptive reporting and produce commercially actionable retention insight.
