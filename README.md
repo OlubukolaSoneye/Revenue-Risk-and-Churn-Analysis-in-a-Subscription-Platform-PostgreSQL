@@ -60,7 +60,7 @@ FROM customer_subscription;
 Roughly 20% of recurring revenue is currently exposed, indicating moderate but strategically significant churn risk.
 
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 16.49.14.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 16.49.14.png" width="400"/>
 </p>
 
 2. Revenue by Subscription Plan
@@ -80,7 +80,7 @@ ORDER BY revenue DESC;
 Premium customers generate the highest revenue (£3,329.83) and therefore represent the largest absolute exposure (£668.87), making this segment strategically critical despite a moderate churn rate (16.82%). Basic shows the highest churn (18.77%) while still contributing meaningful revenue (£2,801.31), indicating elevated retention risk within a price-sensitive tier. Standard is the most stable segment, combining strong revenue (£2,715.06) with the lowest churn (16.38%).
 
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 16.55.53.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 16.55.53.png" width="400"/>
 </p>
 
 3. Revenue Concentration
@@ -110,7 +110,7 @@ FROM (
 
 The top 20% of customers generate £2,642.11 in monthly revenue, with £633.82 attributable to churned users. This indicates that nearly 24% of high-value revenue has been lost, signalling concentrated financial risk within the most valuable segment.
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="400"/>
 </p>
 
 4. High-Value Revenue at Risk
@@ -136,7 +136,7 @@ FROM (
 
 Churn within the top revenue segment accounts for £633 in monthly recurring revenue, demonstrating that revenue loss is concentrated among high-value customers rather than evenly distributed across the base.
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 17.05.50.png" width="400"/>
 </p>
 
 5. Behavioural Drivers of Churn
@@ -159,7 +159,7 @@ GROUP BY churn;
 
 Within the top revenue segment, churn correlates with lower engagement and higher support interaction, while satisfaction scores remain stable, indicating behavioural friction, not price or sentiment, as the primary driver.
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 17.26.16.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 17.26.16.png" width="400"/>
 </p>
 
 
@@ -178,7 +178,7 @@ ORDER BY avg_price DESC;
 
 Despite near-identical average pricing across plans, churn differs across the categories. Basic exhibits the highest churn rate, this suggests churn is not primarily price-driven.
 <p align="left">
-  <img src="Screenshot 2026-02-25 at 17.47.44.png" width="300"/>
+  <img src="Screenshot 2026-02-25 at 17.47.44.png" width="400"/>
 </p>
 
 ## 💡 Commercial Recommendations
